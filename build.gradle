@@ -2,42 +2,31 @@ apply plugin: 'war'
 apply plugin: 'java'
 apply plugin: 'maven'
 
-//buildDir = 'target/gradle-build'
-
 ext.libraryVersions = [
-        javaee: '7.0',
-        cdi: '1.1',
-        wildfly: '8.0.0.Beta1',
-        junit: '4.11',
-        arquillian: '1.1.2.Final',
-        shrinkWrapResolverGradle: '2.0.2-SNAPSHOT'
+        javaee                  : '7.0',
+        wildfly                 : '8.0.0.Final',
+        junit                   : '4.11',
+        arquillian              : '1.1.3.Final',
+        shrinkWrapResolverGradle: '2.0.3-SNAPSHOT'
 ]
 
 group = 'org.jboss.shrinkwrap.resolver.example'
 version = '1.0.0'
 description = """ShrinkWrap Resolver Gradle Embedded Importer Example"""
 
-
 repositories {
     mavenCentral()
     // temporary - my local repo for shrinkWrapResolverGradle snapshot!
-    maven {
-        url 'file:///I:/.m2/'
-    }
+    maven { url 'file:///I:/.m2/' }
 
-    maven {
-        url 'http://repository.jboss.org/nexus/content/groups/public'
-    }
+    maven { url 'http://repository.jboss.org/nexus/content/groups/public' }
 
 
-    maven {
-        url 'http://repository.jboss.org/nexus/content/repositories/deprecated'
-    }
+    maven { url 'http://repository.jboss.org/nexus/content/repositories/deprecated' }
 }
 
 dependencies {
     compile group: 'javax', name: 'javaee-api', version: libraryVersions.javaee
-    compile group: 'javax.enterprise', name: 'cdi-api', version: libraryVersions.cdi
 
     testCompile group: 'junit', name: 'junit', version: libraryVersions.junit
     testCompile group: 'org.jboss.arquillian.junit', name: 'arquillian-junit-container', version: libraryVersions.arquillian
@@ -55,3 +44,13 @@ sourceSets {
     }
 }
 
+test {
+    testLogging {
+        events 'passed', 'skipped', 'failed'
+        exceptionFormat = 'full'
+    }
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '1.10'
+}

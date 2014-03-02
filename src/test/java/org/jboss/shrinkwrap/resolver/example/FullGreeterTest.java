@@ -3,9 +3,9 @@ package org.jboss.shrinkwrap.resolver.example;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
-import org.jboss.shrinkwrap.api.gradle.archive.importer.embedded.DistributionConfigurationStage;
+import org.jboss.shrinkwrap.api.asset.EmptyAsset;
 import org.jboss.shrinkwrap.api.gradle.archive.importer.embedded.EmbeddedGradleImporter;
-import org.jboss.shrinkwrap.api.spec.JavaArchive;
+import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -15,13 +15,12 @@ import javax.inject.Inject;
 @RunWith(Arquillian.class)
 public class FullGreeterTest {
 
-    @Deployment(testable = false)
-    public static JavaArchive createDeployment() {
-        System.out.println("Before deploy");
-        final JavaArchive as = ShrinkWrap.create(EmbeddedGradleImporter.class).forProjectDirectory("")
-                .importBuildOutput().as(JavaArchive.class);
-        System.out.println("After test");
-        return as;
+    @Deployment
+    public static WebArchive createDeployment() {
+        return ShrinkWrap.create(EmbeddedGradleImporter.class)
+                .forThisProjectDirectory()
+                .importBuildOutput().as(WebArchive.class)
+                .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml");
     }
 
     @Inject
@@ -29,14 +28,8 @@ public class FullGreeterTest {
 
     @Test
     public void should_create_greeting() {
-        System.out.println("Before test");
         Assert.assertEquals("Hello, Earthling!",
                 greeter.createGreeting("Earthling"));
         greeter.greet(System.out, "Earthling");
     }
-
-//    public static void main(String[] args) {
-//        ShrinkWrap.create(EmbeddedGradleImporter.class).forProjectDirectory("")
-//                .importBuildOutput().as(JavaArchive.class);
-//    }
 }
