@@ -6,11 +6,13 @@ import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.asset.EmptyAsset;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
-import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import javax.inject.Inject;
+
+import static org.hamcrest.core.IsEqual.equalTo;
+import static org.junit.Assert.assertThat;
 
 @RunWith(Arquillian.class)
 public class GreeterTest {
@@ -23,12 +25,17 @@ public class GreeterTest {
     }
 
     @Inject
-    Greeter greeter;
+    private Greeter greeter;
 
     @Test
-    public void should_create_greeting() {
-        Assert.assertEquals("Hello, Earthling!",
-                greeter.createGreeting("Earthling"));
-        greeter.greet(System.out, "Earthling");
+    public void shouldCreateGreeting() {
+        // setup
+        final String name = "Earthling";
+
+        // when
+        final String result = greeter.createGreeting(name);
+
+        // then
+        assertThat(result, equalTo("Hello, " + name + "!"));
     }
 }
