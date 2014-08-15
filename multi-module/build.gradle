@@ -1,0 +1,19 @@
+apply plugin: 'maven'
+
+group = 'org.jboss.shrinkwrap.resolver.example'
+version = '1.0.0'
+description = """ShrinkWrap Resolver Gradle Embedded Importer Example"""
+
+subprojects {
+
+    repositories {
+        mavenCentral()
+        maven { url 'http://repository.jboss.org/nexus/content/groups/public' }
+        maven { url 'http://repository.jboss.org/nexus/content/repositories/deprecated' }
+        maven { url 'http://repo.jfrog.org/artifactory/repo' }
+    }
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.0'
+}

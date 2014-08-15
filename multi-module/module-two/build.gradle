@@ -1,0 +1,38 @@
+apply plugin: 'war'
+apply plugin: 'java'
+
+ext.libraryVersions = [
+        javaee                  : '7.0',
+        wildfly                 : '8.1.0.Final',
+        junit                   : '4.11',
+        arquillian              : '1.1.5.Final',
+        shrinkWrapResolverGradle: '2.2.0-alpha-2'
+]
+
+dependencies {
+    compile(project(':module-one'))
+
+    compile group: 'javax', name: 'javaee-api', version: libraryVersions.javaee
+
+    testCompile group: 'junit', name: 'junit', version: libraryVersions.junit
+    testCompile group: 'org.jboss.arquillian.junit', name: 'arquillian-junit-container', version: libraryVersions.arquillian
+    testCompile group: 'org.jboss.arquillian.protocol', name: 'arquillian-protocol-servlet', version: libraryVersions.arquillian
+    testCompile group: 'org.wildfly', name: 'wildfly-arquillian-container-managed', version: libraryVersions.wildfly
+    testCompile group: 'org.jboss.shrinkwrap.resolver', name: 'shrinkwrap-resolver-gradle-depchain', version: libraryVersions.shrinkWrapResolverGradle
+}
+
+sourceSets {
+    main {
+        compileClasspath = configurations.compile + configurations.compile
+    }
+    test {
+        compileClasspath = compileClasspath + configurations.compile
+    }
+}
+
+    test {
+        testLogging {
+            events 'passed', 'skipped', 'failed'
+            exceptionFormat = 'full'
+        }
+    }
