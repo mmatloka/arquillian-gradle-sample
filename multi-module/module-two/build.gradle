@@ -1,38 +1,21 @@
-apply plugin: 'war'
 apply plugin: 'java'
-
-ext.libraryVersions = [
-        javaee                  : '7.0',
-        wildfly                 : '8.1.0.Final',
-        junit                   : '4.11',
-        arquillian              : '1.1.5.Final',
-        shrinkWrapResolverGradle: '2.2.0-beta-1'
-]
+apply plugin: 'war'
 
 dependencies {
     compile(project(':module-one'))
 
-    compile group: 'javax', name: 'javaee-api', version: libraryVersions.javaee
+    providedCompile "javax:javaee-api:${libraryVersions.javaee}"
 
-    testCompile group: 'junit', name: 'junit', version: libraryVersions.junit
-    testCompile group: 'org.jboss.arquillian.junit', name: 'arquillian-junit-container', version: libraryVersions.arquillian
-    testCompile group: 'org.jboss.arquillian.protocol', name: 'arquillian-protocol-servlet', version: libraryVersions.arquillian
-    testCompile group: 'org.wildfly', name: 'wildfly-arquillian-container-managed', version: libraryVersions.wildfly
-    testCompile group: 'org.jboss.shrinkwrap.resolver', name: 'shrinkwrap-resolver-gradle-depchain', version: libraryVersions.shrinkWrapResolverGradle
+    testCompile "junit:junit:${libraryVersions.junit}"
+    testCompile "org.jboss.arquillian.junit:arquillian-junit-container:${libraryVersions.arquillian}"
+    testCompile "org.jboss.arquillian.protocol:arquillian-protocol-servlet:${libraryVersions.arquillian}"
+    testCompile "org.wildfly:wildfly-arquillian-container-managed:${libraryVersions.wildfly}"
+    testCompile "org.jboss.shrinkwrap.resolver:shrinkwrap-resolver-gradle-depchain:${libraryVersions.shrinkWrapResolverGradle}"
 }
 
-sourceSets {
-    main {
-        compileClasspath = configurations.compile + configurations.compile
-    }
-    test {
-        compileClasspath = compileClasspath + configurations.compile
+test {
+    testLogging {
+        events 'passed', 'skipped', 'failed'
+        exceptionFormat = 'full'
     }
 }
-
-    test {
-        testLogging {
-            events 'passed', 'skipped', 'failed'
-            exceptionFormat = 'full'
-        }
-    }
