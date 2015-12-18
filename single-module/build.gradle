@@ -3,14 +3,14 @@ apply plugin: 'war'
 
 ext.libraryVersions = [
         javaee                  : '7.0',
-        wildfly                 : '8.2.1.Final',
+        wildfly                 : '1.1.0.Alpha1',
         junit                   : '4.12',
-        arquillian              : '1.1.8.Final',
-        shrinkWrapResolverGradle: '2.2.0-beta-2'
+        arquillian              : '1.1.10.Final',
+        shrinkWrapResolverGradle: '2.2.0'
 ]
 
 group = 'org.jboss.shrinkwrap.resolver.example'
-version = '1.0.1'
+version = '1.1.0'
 description = """ShrinkWrap Resolver Gradle Embedded Importer Example"""
 
 repositories {
@@ -26,7 +26,7 @@ dependencies {
     testCompile "junit:junit:${libraryVersions.junit}"
     testCompile "org.jboss.arquillian.junit:arquillian-junit-container:${libraryVersions.arquillian}"
     testCompile "org.jboss.arquillian.protocol:arquillian-protocol-servlet:${libraryVersions.arquillian}"
-    testCompile "org.wildfly:wildfly-arquillian-container-managed:${libraryVersions.wildfly}"
+    testCompile "org.wildfly.arquillian:wildfly-arquillian-container-managed:${libraryVersions.wildfly}"
     testCompile "org.jboss.shrinkwrap.resolver:shrinkwrap-resolver-gradle-depchain:${libraryVersions.shrinkWrapResolverGradle}"
 }
 
@@ -38,5 +38,5 @@ test {
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '2.6'
+    gradleVersion = '2.9'
 }
